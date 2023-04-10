@@ -1,0 +1,24 @@
+apiVersion: v1
+entries:
+  cert-manager-webhook-hostingde:
+  - apiVersion: v1
+    appVersion: "1.0"
+    created: "2023-04-10T11:29:25.928788627Z"
+    description: hosting.de webhook for cert-manager
+    digest: 0c0be04c62c5978c0973d773718e3bdb9ec247c3ac3e5bbdfa9777f5dd9718a7
+    name: cert-manager-webhook-hostingde
+    urls:
+    - https://github.com/oliverziegert/helm-charts/releases/download/cert-manager-webhook-hostingde-0.1.1/cert-manager-webhook-hostingde-0.1.1.tgz
+    version: 0.1.1
+  uptime-kuma:
+  - apiVersion: v2
+    appVersion: 1.21.2
+    created: "2023-04-10T11:29:26.283390317Z"
+    description: A Helm chart for Kubernetes to deploy Uptime Kuma
+    digest: 1011893f8f7d077acd6fa7b0e248daec62309b7230d187e513c2feb45da841da
+    name: uptime-kuma
+    type: application
+    urls:
+    - https://github.com/oliverziegert/helm-charts/releases/download/uptime-kuma-0.1.0/uptime-kuma-0.1.0.tgz
+    version: 0.1.0
+generated: "2023-04-10T11:29:26.283394516Z"
