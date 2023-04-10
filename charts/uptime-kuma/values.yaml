@@ -40,39 +40,44 @@ service:
   type: ClusterIP
   port: 3001
 
-ingresses:
-  public:
-    enabled: true
-    className: "haproxy"
-    annotations:
-      haproxy-ingress.github.io/allowlist-source-range: "0.0.0.0/0,::/0"
-    hosts:
-      - host: status.pc-ziegert.de
-        paths:
-          - path: /
-            pathType: Prefix
-    tls:
-      - hosts:
-          - status.pc-ziegert.de
-        secretName: pc-ziegert-de-wildcard-cert
-  private:
-    enabled: true
-    className: "haproxy"
-    annotations: {}
-    hosts:
-      - host: uptime-kuma.pc-ziegert.de
-        paths:
-          - path: /
-            pathType: Prefix
-      - host: status-internal.pc-ziegert.de
-        paths:
-          - path: /
-            pathType: Prefix
-    tls:
-      - hosts:
-          - uptime-kuma.pc-ziegert.de
-          - status-internal.pc-ziegert.de
-        secretName: pc-ziegert-de-wildcard-cert
+# multiple ingresse can be defined to provide e.g. dashboads public. 
+# The config ui remains only accessible from certain whitelist range.
+# Ingress hostnames must match configured dashboard hostnames
+ingresses: {}
+  # public:
+  #   enabled: false
+  #   className: ""
+  #   annotations: {}
+  #     # kubernetes.io/ingress.class: nginx
+  #     # kubernetes.io/tls-acme: "true"
+  #     # nginx.ingress.kubernetes.io/whitelist-source-range: '0.0.0.0/0,::/0'
+  #     # haproxy-ingress.github.io/allowlist-source-range: '0.0.0.0/0,::/0'
+  #   hosts:
+  #     - host: chart-example.local
+  #       paths:
+  #         - path: /
+  #           pathType: Prefix
+  #   tls: []
+  #   #  - secretName: chart-example-tls
+  #   #    hosts:
+  #   #      - chart-example.local
+  # private:
+  #   enabled: false
+  #   className: ""
+  #   annotations: {}
+  #     # kubernetes.io/ingress.class: nginx
+  #     # kubernetes.io/tls-acme: "true"
+  #     # nginx.ingress.kubernetes.io/whitelist-source-range: '192.168.178.0/24'
+  #     # haproxy-ingress.github.io/allowlist-source-range: '0.0.0.0/0,::/0'
+  #   hosts:
+  #     - host: chart-example.local
+  #       paths:
+  #         - path: /
+  #           pathType: Prefix
+  #   tls: []
+  #   #  - secretName: chart-example-tls
+  #   #    hosts:
+  #   #      - chart-example.local
 
 resources:
   requests:
