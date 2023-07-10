@@ -1,40 +1,41 @@
+{{- if .Values.uptimeKuma.enabled }}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "uptime-kuma.fullname" . }}
+  name: {{ include "uptime-kuma.uptimeKuma.fullname" . }}
   labels:
-    {{- include "uptime-kuma.labels" . | nindent 4 }}
+    {{- include "uptime-kuma.uptimeKuma.labels" . | nindent 4 }}
 spec:
-  {{- if not .Values.autoscaling.enabled }}
-  replicas: {{ .Values.replicaCount }}
+  {{- if not .Values.uptimeKuma.autoscaling.enabled }}
+  replicas: {{ .Values.uptimeKuma.replicaCount }}
   {{- end }}
   strategy:
     type: Recreate
   selector:
     matchLabels:
-      {{- include "uptime-kuma.selectorLabels" . | nindent 6 }}
+      {{- include "uptime-kuma.uptimeKuma.selectorLabels" . | nindent 6 }}
   template:
     metadata:
-      {{- with .Values.podAnnotations }}
+      {{- with .Values.uptimeKuma.podAnnotations }}
       annotations:
         {{- toYaml . | nindent 8 }}
       {{- end }}
       labels:
-        {{- include "uptime-kuma.selectorLabels" . | nindent 8 }}
+        {{- include "uptime-kuma.uptimeKuma.selectorLabels" . | nindent 8 }}
     spec:
-      {{- with .Values.imagePullSecrets }}
+      {{- with .Values.uptimeKuma.imagePullSecrets }}
       imagePullSecrets:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      serviceAccountName: {{ include "uptime-kuma.serviceAccountName" . }}
+      serviceAccountName: {{ include "uptime-kuma.uptimeKuma.serviceAccountName" . }}
       securityContext:
-        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+        {{- toYaml .Values.uptimeKuma.podSecurityContext | nindent 8 }}
       containers:
         - name: {{ .Chart.Name }}
           securityContext:
-            {{- toYaml .Values.securityContext | nindent 12 }}
-          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
-          imagePullPolicy: {{ .Values.image.pullPolicy }}
+            {{- toYaml .Values.uptimeKuma.securityContext | nindent 12 }}
+          image: "{{ .Values.uptimeKuma.image.repository }}:{{ .Values.uptimeKuma.image.tag }}"
+          imagePullPolicy: {{ .Values.uptimeKuma.image.pullPolicy }}
           ports:
             - name: http
               containerPort: 3001
@@ -57,32 +58,33 @@ spec:
             timeoutSeconds: 3
             failureThreshold: 600
           resources:
-            {{- toYaml .Values.resources | nindent 12 }}
+            {{- toYaml .Values.uptimeKuma.resources | nindent 12 }}
           volumeMounts:
             - name: localtime
               mountPath: /etc/localtime
-          {{- if .Values.persistence.enabled }}
+          {{- if .Values.uptimeKuma.persistence.enabled }}
             - name: data
               mountPath: /app/data
           {{- end }}
       volumes:
         - name: localtime
           hostPath:
-            path: {{ .Values.localtime }}
-        {{- if .Values.persistence.enabled }}
+            path: {{ .Values.uptimeKuma.localtime }}
+        {{- if .Values.uptimeKuma.persistence.enabled }}
         - name: data
           persistentVolumeClaim:
-            claimName: {{ include "uptime-kuma.persistentVolumeClaim" . }}
+            claimName: {{ include "uptime-kuma.uptimeKuma.persistentVolumeClaim" . }}
         {{- end }}
-      {{- with .Values.nodeSelector }}
+      {{- with .Values.uptimeKuma.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      {{- with .Values.affinity }}
+      {{- with .Values.uptimeKuma.affinity }}
       affinity:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      {{- with .Values.tolerations }}
+      {{- with .Values.uptimeKuma.tolerations }}
       tolerations:
         {{- toYaml . | nindent 8 }}
       {{- end }}
+{{- end }}

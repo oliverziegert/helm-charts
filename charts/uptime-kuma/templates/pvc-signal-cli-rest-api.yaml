@@ -1,0 +1,30 @@
+{{- if .Values.signal.enabled }}
+{{- if and .Values.signal.persistence.enabled (not .Values.signal.persistence.existingClaim) }}
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ include "uptime-kuma.signal.fullname" . }}
+  labels:
+    {{- include "uptime-kuma.signal.labels" . | nindent 4 }}
+    {{- if .Values.signal.persistence.labels }}
+    {{- toYaml .Values.signal.persistence.labels | nindent 4 }}
+    {{- end }}
+  {{- if .Values.signal.persistence.annotations  }}
+  annotations:
+  {{- .Values.signal.persistence.annotations | nindent 4 }}
+  {{- end }}
+spec:
+  accessModes:
+  {{- range .Values.signal.persistence.accessModes }}
+    - {{ . | quote }}
+  {{- end }}
+  resources:
+    requests:
+      storage: {{ .Values.signal.persistence.size | quote }}
+  {{ include "uptime-kuma.signal.storageClass" . }}
+  {{- if .Values.signal.persistence.selector }}
+  selector: 
+    {{- .Values.signal.persistence.selector | nindent 4 }}
+  {{- end }}
+{{- end }}
+{{- end }}

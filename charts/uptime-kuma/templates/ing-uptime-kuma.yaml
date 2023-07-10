@@ -1,8 +1,9 @@
+{{- if .Values.uptimeKuma.enabled }}
 {{ $root := .}}
-{{- range $ingressSuffix, $ingress := .Values.ingresses -}}
+{{- range $ingressSuffix, $ingress := .Values.uptimeKuma.ingresses -}}
 {{- if $ingress.enabled -}}
-{{- $fullName := include "uptime-kuma.fullname" $root -}}
-{{- $svcPort := $root.Values.service.port -}}
+{{- $fullName := include "uptime-kuma.uptimeKuma.fullname" $root -}}
+{{- $svcPort := $root.Values.uptimeKuma.service.port -}}
 {{- if and $ingress.className (not (semverCompare ">=1.18-0" $root.Capabilities.KubeVersion.GitVersion)) }}
   {{- if not (hasKey $ingress.annotations "kubernetes.io/ingress.class") }}
   {{- $_ := set $ingress.annotations "kubernetes.io/ingress.class" $ingress.className}}
@@ -19,7 +20,7 @@ kind: Ingress
 metadata:
   name: {{ printf "%s-%s" $fullName $ingressSuffix }}
   labels:
-    {{- include "uptime-kuma.labels" $root | nindent 4 }}
+    {{- include "uptime-kuma.uptimeKuma.labels" $root | nindent 4 }}
   {{- with $ingress.annotations }}
   annotations:
     {{- toYaml . | nindent 4 }}
@@ -63,3 +64,4 @@ spec:
 {{- end }}
 ---
 {{ end }}
+{{- end }}

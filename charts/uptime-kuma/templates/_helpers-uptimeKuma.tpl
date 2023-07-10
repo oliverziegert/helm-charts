@@ -1,8 +1,8 @@
 {{/*
 Expand the name of the chart.
 */}}
-{{- define "uptime-kuma.name" -}}
-{{- default .Chart.Name .Values.nameOverride | trunc 63 | trimSuffix "-" }}
+{{- define "uptime-kuma.uptimeKuma.name" -}}
+{{- default .Chart.Name .Values.uptimeKuma.nameOverride | trunc 63 | trimSuffix "-" }}
 {{- end }}
 
 {{/*
@@ -10,11 +10,11 @@ Create a default fully qualified app name.
 We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
 If release name contains chart name it will be used as a full name.
 */}}
-{{- define "uptime-kuma.fullname" -}}
-{{- if .Values.fullnameOverride }}
-{{- .Values.fullnameOverride | trunc 63 | trimSuffix "-" }}
+{{- define "uptime-kuma.uptimeKuma.fullname" -}}
+{{- if .Values.uptimeKuma.fullnameOverride }}
+{{- .Values.uptimeKuma.fullnameOverride | trunc 63 | trimSuffix "-" }}
 {{- else }}
-{{- $name := default .Chart.Name .Values.nameOverride }}
+{{- $name := default .Chart.Name .Values.uptimeKuma.nameOverride }}
 {{- if contains $name .Release.Name }}
 {{- .Release.Name | trunc 63 | trimSuffix "-" }}
 {{- else }}
@@ -26,16 +26,16 @@ If release name contains chart name it will be used as a full name.
 {{/*
 Create chart name and version as used by the chart label.
 */}}
-{{- define "uptime-kuma.chart" -}}
+{{- define "uptime-kuma.uptimeKuma.chart" -}}
 {{- printf "%s-%s" .Chart.Name .Chart.Version | replace "+" "_" | trunc 63 | trimSuffix "-" }}
 {{- end }}
 
 {{/*
 Common labels
 */}}
-{{- define "uptime-kuma.labels" -}}
-helm.sh/chart: {{ include "uptime-kuma.chart" . }}
-{{ include "uptime-kuma.selectorLabels" . }}
+{{- define "uptime-kuma.uptimeKuma.labels" -}}
+helm.sh/chart: {{ include "uptime-kuma.uptimeKuma.chart" . }}
+{{ include "uptime-kuma.uptimeKuma.selectorLabels" . }}
 {{- if .Chart.AppVersion }}
 app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 {{- end }}
@@ -45,27 +45,27 @@ app.kubernetes.io/managed-by: {{ .Release.Service }}
 {{/*
 Selector labels
 */}}
-{{- define "uptime-kuma.selectorLabels" -}}
-app.kubernetes.io/name: {{ include "uptime-kuma.name" . }}
+{{- define "uptime-kuma.uptimeKuma.selectorLabels" -}}
+app.kubernetes.io/name: {{ include "uptime-kuma.uptimeKuma.name" . }}
 app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end }}
 
 {{/*
 Create the name of the service account to use
 */}}
-{{- define "uptime-kuma.serviceAccountName" -}}
-{{- if .Values.serviceAccount.create }}
-{{- default (include "uptime-kuma.fullname" .) .Values.serviceAccount.name }}
+{{- define "uptime-kuma.uptimeKuma.serviceAccountName" -}}
+{{- if .Values.uptimeKuma.serviceAccount.create }}
+{{- default (include "uptime-kuma.uptimeKuma.fullname" .) .Values.uptimeKuma.serviceAccount.name }}
 {{- else }}
-{{- default "default" .Values.serviceAccount.name }}
+{{- default "default" .Values.uptimeKuma.serviceAccount.name }}
 {{- end }}
 {{- end }}
 
 {{/*
 Returns the proper Storage Class
 */}}
-{{- define "uptime-kuma.storageClass" -}}
-{{- $storageClass := .Values.persistence.storageClass -}}
+{{- define "uptime-kuma.uptimeKuma.storageClass" -}}
+{{- $storageClass := .Values.uptimeKuma.persistence.storageClass -}}
 {{- if $storageClass -}}
   {{- if (eq "-" $storageClass) -}}
       {{- printf "storageClassName: \"\"" -}}
@@ -78,10 +78,10 @@ Returns the proper Storage Class
 {{/*
 Returns the proper Storage Claim name
 */}}
-{{- define "uptime-kuma.persistentVolumeClaim" -}}
-{{- if (eq "" .Values.persistence.existingClaim) -}}
-  {{- printf (include "uptime-kuma.fullname" .) -}}
+{{- define "uptime-kuma.uptimeKuma.persistentVolumeClaim" -}}
+{{- if (eq "" .Values.uptimeKuma.persistence.existingClaim) -}}
+  {{- printf (include "uptime-kuma.uptimeKuma.fullname" .) -}}
 {{- else }}
-  {{- printf .Values.persistence.existingClaim -}}
+  {{- printf .Values.uptimeKuma.persistence.existingClaim -}}
 {{- end -}}
 {{- end -}}

@@ -1,0 +1,30 @@
+{{- if .Values.signal.enabled }}
+{{- if .Values.signal.autoscaling.enabled }}
+apiVersion: autoscaling/v2beta1
+kind: HorizontalPodAutoscaler
+metadata:
+  name: {{ include "uptime-kuma.signal.fullname" . }}
+  labels:
+    {{- include "uptime-kuma.signal.labels" . | nindent 4 }}
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: {{ include "uptime-kuma.signal.fullname" . }}
+  minReplicas: {{ .Values.signal.autoscaling.minReplicas }}
+  maxReplicas: {{ .Values.signal.autoscaling.maxReplicas }}
+  metrics:
+    {{- if .Values.signal.autoscaling.targetCPUUtilizationPercentage }}
+    - type: Resource
+      resource:
+        name: cpu
+        targetAverageUtilization: {{ .Values.signal.autoscaling.targetCPUUtilizationPercentage }}
+    {{- end }}
+    {{- if .Values.signal.autoscaling.targetMemoryUtilizationPercentage }}
+    - type: Resource
+      resource:
+        name: memory
+        targetAverageUtilization: {{ .Values.signal.autoscaling.targetMemoryUtilizationPercentage }}
+    {{- end }}
+{{- end }}
+{{- end }}

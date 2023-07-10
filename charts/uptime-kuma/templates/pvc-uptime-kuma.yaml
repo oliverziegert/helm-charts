@@ -1,0 +1,30 @@
+{{- if .Values.uptimeKuma.enabled }}
+{{- if and .Values.uptimeKuma.persistence.enabled (not .Values.uptimeKuma.persistence.existingClaim) }}
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ include "uptime-kuma.uptimeKuma.fullname" . }}
+  labels:
+    {{- include "uptime-kuma.uptimeKuma.labels" . | nindent 4 }}
+    {{- if .Values.uptimeKuma.persistence.labels }}
+    {{- toYaml .Values.uptimeKuma.persistence.labels | nindent 4 }}
+    {{- end }}
+  {{- if .Values.uptimeKuma.persistence.annotations  }}
+  annotations:
+  {{- .Values.uptimeKuma.persistence.annotations | nindent 4 }}
+  {{- end }}
+spec:
+  accessModes:
+  {{- range .Values.uptimeKuma.persistence.accessModes }}
+    - {{ . | quote }}
+  {{- end }}
+  resources:
+    requests:
+      storage: {{ .Values.uptimeKuma.persistence.size | quote }}
+  {{ include "uptime-kuma.uptimeKuma.storageClass" . }}
+  {{- if .Values.uptimeKuma.persistence.selector }}
+  selector: 
+    {{- .Values.uptimeKuma.persistence.selector | nindent 4 }}
+  {{- end }}
+{{- end }}
+{{- end }}

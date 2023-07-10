@@ -1,0 +1,94 @@
+{{- if .Values.signal.enabled }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "uptime-kuma.signal.fullname" . }}
+  labels:
+    {{- include "uptime-kuma.signal.labels" . | nindent 4 }}
+spec:
+  {{- if not .Values.signal.autoscaling.enabled }}
+  replicas: {{ .Values.signal.replicaCount }}
+  {{- end }}
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      {{- include "uptime-kuma.signal.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      {{- with .Values.signal.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "uptime-kuma.signal.selectorLabels" . | nindent 8 }}
+    spec:
+      {{- with .Values.signal.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "uptime-kuma.signal.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.signal.podSecurityContext | nindent 8 }}
+      containers:
+        - name: {{ .Chart.Name }}
+          securityContext:
+            {{- toYaml .Values.signal.securityContext | nindent 12 }}
+          image: "{{ .Values.signal.image.repository }}:{{ .Values.signal.image.tag }}"
+          imagePullPolicy: {{ .Values.signal.image.pullPolicy }}
+          ports:
+            - name: http
+              containerPort: 8080
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: /v1/health
+              port: http
+              scheme: HTTP
+          readinessProbe:
+            httpGet:
+              path: /v1/health
+              port: http
+              scheme: HTTP
+          startupProbe:
+            httpGet:
+              path: /v1/health
+              port: http
+              scheme: HTTP
+            initialDelaySeconds: 5
+            periodSeconds: 5
+            timeoutSeconds: 3
+            failureThreshold: 600
+          resources:
+            {{- toYaml .Values.signal.resources | nindent 12 }}
+          env:
+            {{- toYaml .Values.signal.env | nindent 12 }}
+          volumeMounts:
+            - name: localtime
+              mountPath: /etc/localtime
+          {{- if .Values.signal.persistence.enabled }}
+            - name: data
+              mountPath: /home/.local/share/signal-cli
+          {{- end }}
+      volumes:
+        - name: localtime
+          hostPath:
+            path: {{ .Values.signal.localtime }}
+        {{- if .Values.signal.persistence.enabled }}
+        - name: data
+          persistentVolumeClaim:
+            claimName: {{ include "uptime-kuma.signal.persistentVolumeClaim" . }}
+        {{- end }}
+      {{- with .Values.signal.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.signal.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.signal.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+{{- end }}
