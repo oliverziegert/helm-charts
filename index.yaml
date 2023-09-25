@@ -12,6 +12,16 @@ entries:
     version: 0.1.1
   uptime-kuma:
   - apiVersion: v2
+    appVersion: 1.23.2
+    created: "2023-09-25T18:18:26.937575737Z"
+    description: A Helm chart for Kubernetes to deploy Uptime Kuma
+    digest: ec3f0da7bd4fe7b738297120de5cf4873d85728da4726d44121ea2650844730b
+    name: uptime-kuma
+    type: application
+    urls:
+    - https://github.com/oliverziegert/helm-charts/releases/download/uptime-kuma-1.23.2/uptime-kuma-1.23.2.tgz
+    version: 1.23.2
+  - apiVersion: v2
     appVersion: 1.23.1
     created: "2023-08-30T22:11:42.950996414Z"
     description: A Helm chart for Kubernetes to deploy Uptime Kuma
@@ -71,4 +81,4 @@ entries:
     urls:
     - https://github.com/oliverziegert/helm-charts/releases/download/uptime-kuma-0.1.0/uptime-kuma-0.1.0.tgz
     version: 0.1.0
-generated: "2023-08-30T22:11:42.951017914Z"
+generated: "2023-09-25T18:18:26.937596237Z"
