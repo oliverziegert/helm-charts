@@ -34,7 +34,7 @@ spec:
         - name: {{ .Chart.Name }}
           securityContext:
             {{- toYaml .Values.uptimeKuma.securityContext | nindent 12 }}
-          image: "{{ .Values.uptimeKuma.image.repository }}:{{ .Values.uptimeKuma.image.tag }}"
+          image: "{{ .Values.uptimeKuma.image.repository }}:{{ .Values.uptimeKuma.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.uptimeKuma.image.pullPolicy }}
           ports:
             - name: http
