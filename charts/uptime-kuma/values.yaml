@@ -147,7 +147,7 @@ signal:
   image:
     repository: bbernhard/signal-cli-rest-api
     # Overrides the image tag whose default is the chart appVersion.
-    tag: "0.82"
+    tag: "0.83"
     pullPolicy: IfNotPresent
 
   imagePullSecrets: []
